@@ -183,7 +183,7 @@ The Small Round Blue Cell Tumours (SRBCT) data set from [@Kha01] includes the ex
 More details can be found in `?srbct`. 
 
 
-## Load the data {#01:load-data}
+## Load the data
 
 We first load the data from the package and store the gene expression data in a  $\boldsymbol X$ object. 
 
@@ -270,7 +270,7 @@ length(Y)
 ## First pass: PLS-DA
 
 We  run a PLS-DA model that includes three components:
-```{r 01-plsda-final, reuslts = 'hide', fig.show='hide'}
+```{r 01-plsda, results = 'hide', fig.show='hide'}
 plsda.srbct <- plsda(X,Y, ncomp = 3)
 
 plotIndiv(plsda.srbct, ind.names = FALSE, legend=TRUE,
@@ -336,6 +336,67 @@ Show solutions
 
 <!-- end solutions -->
 
+
+## Sparse PLS-DA for variable selection
+
+We run similar command lines, but this time we use *sparse PLS-DA* that will enable us to select the top discriminant variables. The variable selection process is done within PLS-DA. For this, we need to specify the number of variables to select per component.
+
+```{r 02-splsda, results = 'hide', fig.show='hide'}
+splsda.srbct <- splsda(X,Y, ncomp = 3,
+                       keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 30 on the third component
+                       )
+
+plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
+          comp=c(1,2), 
+          title = 'PLS-DA on SRBCT comp 1-2')
+
+plotLoadings(splsda.srbct, 
+             contrib = 'max',  # max = which class has maximum mean (median) expression (vs. min)
+             method = 'mean',  # choose either mean or median
+             comp = 1)
+
+plotVar(splsda.srbct)  # variable plot (correlation circle plot)
+```
+
+## Exercise 3: Interpretation
+
+Run the code above, line by line.
+
+1. What are the differences that you observe, compared to the full PLS-DA run previously (i.e with no variable selection). 
+
+2. Plot a sample plot for components 1. vs 3, what do you observe? Also plot the loadings for component 3.
+
+2. Change the values of the `keepX` argument, do you notice large changes?
+
+3. Conclude on the advantages / disadvantages of using sparse PLS-DA for variable selection.
+
+*note: sorry, we have a bug with the biplot that we need to fix!
+
+<button onclick="myFunction(&#39;q3&#39;)">
+
+Show solutions
+
+</button>
+
+::: {#q3 style="display:none"}
+
+#### Answer
+
+1. On the sample plot, the `r colorize("grey", "NB")` and `r colorize("green", "RMS")` are clustered together, whereas the other groups are well separated from each other. Component 1 discriminates  `r colorize("orange", "BL")` vs. the other classes. Component 2 discriminates mostly `r colorize("orange", "BL")` vs `r colorize("blue", "EWS")` vs the others. The loading plot is now much clearer (only one color shown on each side of the positive / negative sign). The loading plot only shows the variables that were selected on each component. Similarly for the correlation circle plot, genes are now better aligned on either the x- or y- axis with stronger contribution.
+
+2. Sample plot of comp 1 vs comp 2 now shows a clearer separation on comp 3 of `r colorize("grey", "NB")` vs. `r colorize("green", "RMS")`. This is also reflected in the loading plot on component 3.
+
+3. If we stick to values that are not too large (i.e up to 50 or so), then the plots and trends remain the same. When the keepX values get very large, then we tend to obtain the same results as PLS-DA.
+
+
+4. Conclusion: sPLS-DA can help identifying key discriminative genes for each sample group. It does so by adopting a 'one group' vs 'all' (or 1 group vs another group) per component. This enables us to identify which genes discriminate which class. The output results are usually neater than a classic PLS-DA. The main challenge is to decide how many genes we should select per component. We do this using repeated cross-validation and estimating the classification error. This is outside the scope of this workshop, but you can have a look at our examples in http://mixomics.org/case-studies/splsda-srbct-case-study/. There are also functions in mixOmics to estimate the classification performance of the final sPLS-DA.
+
+:::
+
+<!-- end solutions -->
+
+
+#3. DIABLO to integrate multi-omics datasets
 
 
 # 6. Session Info
