@@ -1,6 +1,6 @@
 # MIG workshop: multivariate analysis with mixOmics
 
-**Authors: Kim-Anh Lê Cao **
+**Author: Kim-Anh Lê Cao**
 
 **Tutors: Saritha Kodikara**
 
