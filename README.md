@@ -30,7 +30,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 BiocManager::install(c("mixOmics"))
 
-# Test if the package has correctly been installed (i.e no errors messages)
+# Test if the package has correctly been installed (i.e no errors messages, warnings are ok)
 library(mixOmics)
 
 ```
