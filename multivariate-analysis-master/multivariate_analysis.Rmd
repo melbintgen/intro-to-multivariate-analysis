@@ -1,0 +1,346 @@
+---
+title: "Introduction to multivariate analysis"
+author: "Kim-Anh Lê Cao"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_float: yes
+    toc_depth: '3'
+  html_notebook:
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+editor_options: 
+  markdown: 
+    wrap: 72
+  chunk_output_type: console
+---
+
+```{=html}
+<!--
+Show / hide answers to exercises.
+Code adapted from: https://chrisbeeley.net/?p=1104
+-->
+```
+```{=html}
+<script>
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+```
+```{=html}
+<style>
+div .info {
+  margin: auto;
+  background-color: #EAF0FB;
+  width: 95%;
+  padding: 10px;
+}
+</style>
+```
+```{r setup, include=FALSE}
+# Smaller images for pdf
+# knitr::opts_chunk$set(out.width="50%")
+options(width=80)
+```
+
+
+```{r 01-options, include=FALSE}
+library(knitr)
+# global options
+knitr::opts_chunk$set(dpi = 100, echo=TRUE, warning=FALSE, message=FALSE, eval = TRUE,
+                      fig.show=TRUE, fig.width= 9,fig.height= 7.5,fig.align='center', out.width = '70%', message = FALSE)
+
+colorize <- function(color, x) {
+  if (knitr::is_html_output()) {
+    htmlcolor = "black"
+    if(color == "blue"){
+      htmlcolor = "#388ECC"
+    }
+    if(color == "orange"){
+      htmlcolor = "#F68B33"
+    }
+    if(color == "grey"){
+      htmlcolor = "#585858"
+    }
+    if(color == "green"){
+      htmlcolor = "#009E73"
+    }
+    if(color == "pink"){
+      htmlcolor = "#CC79A7"
+    }
+    if(color == "yellow"){
+      htmlcolor = "#999900"
+    }
+    if(color == "darkred"){
+      htmlcolor = "#CC0000"
+    }
+    sprintf("<span style='color: %s;'>%s</span>", htmlcolor, x)
+  } else {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+    }
+}
+```
+# Let's get started {#01}
+
+## Installation {#01:install}
+
+First, download the latest \texttt{mixOmics} version from Bioconductor:
+
+```{r 01-install-bioc, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+ BiocManager::install("mixOmics")
+```
+
+
+The `mixOmics` package should directly import the following packages:
+`igraph, rgl, ellipse, corpcor, RColorBrewer, plyr, parallel, dplyr, tidyr, reshape2, methods, matrixStats, rARPACK, gridExtra`.
+**For Apple mac users:** if you are unable to install the imported package `rgl`, you will need to install the [XQuartz software](https://www.xquartz.org) first.
+
+## Load the package {#01:load-data}
+
+```{r 01-load, message=FALSE}
+library(mixOmics)
+```
+
+Check that there is no error when loading the package, especially for the `rgl` library (see above).
+
+## Upload data
+The examples in this workshop use data that are already part of the package. To upload your own data, check first that your working directory is set, then read your data from a  `.txt` or `.csv` format, either by using **File > Import Dataset** in RStudio or via one of these command lines:
+
+```{r 01-read-data, eval = FALSE}
+# from csv file
+data <- read.csv("your_data.csv", row.names = 1, header = TRUE)
+
+# from txt file
+data <- read.table("your_data.txt", header = TRUE)
+```
+
+For more details about the arguments used to modify those functions, type `?read.csv` or `?read.table` in the R console.
+
+## Quick start in `mixOmics` {#01:quick-start}
+
+Each analysis should follow this workflow:
+
+1. Run the method
+2. Graphical representation of the samples
+3. Graphical representation of the variables
+
+Then use your critical thinking and additional functions and visual tools to make sense of your data! 
+
+For instance, for Principal Components Analysis, we first load the data:
+
+```{r 01-load-nutrimouse}
+data(nutrimouse)       #load data
+X <- nutrimouse$gene    #store data in object called X
+```
+
+
+Then use the following steps:
+
+```{r 01-pca-nutrimouse, fig.show='hide'}
+MyResult.pca <- pca(X)  # 1 Run the method PCA on X
+plotIndiv(MyResult.pca) # 2 Plot the samples from a PCA result
+plotVar(MyResult.pca)   # 3 Plot the variables from a PCA result
+```
+
+
+This is only a first quick-start. The package proposes several methods to perform variable selection and integration.
+
+
+Following our example here, **sparse PCA** can be applied to select the top 5 variables contributing to each of the two components in PCA. The user specifies the number of variables to selected on each component, for example, here 5 variables are selected on each of the first two components (`keepX=c(5,5)`): 
+
+```{r 01-spca-nutrimouse, fig.show='hide'}
+MyResult.spca <- spca(X, keepX=c(5,5)) # 1 Run the method
+plotIndiv(MyResult.spca)               # 2 Plot the samples
+plotVar(MyResult.spca)                 # 3 Plot the variables
+```
+
+You can see know that we have considerably reduced the number of genes in the `plotVar` correlation circle plot.
+
+# 1. PCA on the SRBCT case study {#01}
+
+The Small Round Blue Cell Tumours (SRBCT) data set from [@Kha01] includes the expression levels of 2,308 genes measured on 63 samples. The samples are divided into four classes: 8 Burkitt Lymphoma (BL), 23 Ewing Sarcoma (EWS), 12 neuroblastoma (NB), and 20 rhabdomyosarcoma (RMS). The data are directly available in a processed and normalised format from the `mixOmics` package and contains the following:
+
+- `$gene`: A data frame with 63 rows and 2,308 columns. These are the expression levels of 2,308 genes in 63 subjects,
+
+- `$class`: A vector containing the class of tumour for each individual (4 classes in total),
+
+- `$gene.name`: A data frame with 2,308 rows and 2 columns containing further information on the genes.
+
+More details can be found in `?srbct`. 
+
+
+## Load the data {#01:load-data}
+
+We first load the data from the package and store the gene expression data in a  $\boldsymbol X$ object. 
+
+```{r results = 'hide', message=FALSE}
+library(mixOmics)
+data(srbct)
+X <- srbct$gene
+dim(X)  # check dimension
+```
+
+
+## Exploration with PCA {#01:plsda-pca}
+
+PCA is a useful tool to explore the gene expression data and to assess for sample similarities between tumour types sotred in `srbct$class`. Remember that PCA is an unsupervised approach, but we can colour the samples by their tumour subtype to assist in interpreting the PCA (Figure \@ref(fig:01-plsda-pca)). Here we center (default argument) and scale the data:
+
+```{r 01-plsda-pca, fig.cap='(ref:01-plsda-pca)', fig.show='hide', results = 'hide'}
+pca.srbct <- pca(X, ncomp = 10, scale = TRUE)
+
+pca.srbct
+
+plot(pca.srbct)
+
+# simple version
+plotIndiv(pca.srbct, 
+          pch = 1,    # pch is to show symbols
+          title = 'SRBCT, PCA comp 1 - 2')
+
+# advanced version
+plotIndiv(pca.srbct, 
+          group = srbct$class, # asking to color according to class of tumour
+          ind.names = FALSE,   # not showing the sample names
+          legend = TRUE, 
+          title = 'SRBCT, PCA comp 1 - 2')
+```
+
+## Exercise 1: Interpretation
+
+Run the code above, line by line.
+
+1. How many principal components would you retain, and why.
+
+2. How is a sample plot obtained in PCA? What does it represent?
+
+3. Interpret the sample plot outputs (the simple version first, then the advanced version). What is the major source of variation in the data?
+
+<button onclick="myFunction(&#39;q1&#39;)">
+
+Show solutions
+
+</button>
+
+::: {#q1 style="display:none"}
+
+#### Answer
+
+1. The first two components explain `r round(pca.srbct$cum.var[2]*100, 2)`% of the total variance. Based on the elbow method, we would choose 2 components.
+
+2. A sample plot is obtained by plotting the components as a way to reduce the dimension of the data. It means that  samples are projected into the space spanned by the principal components 1 and 2. 
+
+3. The tumour types are not clustered, meaning that the major source of variation cannot be explained by tumour types. Instead, samples seem to cluster according to an unknown source of variation. We observe almost no separation between the different tumour types in the PCA sample plot, with perhaps the exception of the `r colorize("grey", "NB")` samples that tend to cluster with other samples. This preliminary exploration teaches us two important findings:
+
+- The major source of variation is not attributable to tumour type, but an unknown source (we tend to observe clusters of samples but those are not explained by tumour type). 
+- We need a more 'directed' (supervised) analysis to separate the tumour types, and we should expect that the amount of variance explained by the dimensions in PLS-DA analysis will be small.
+:::
+
+<!-- end solutions -->
+
+
+# 2. PLS-DA on the SRBCT case study {#02}
+
+
+## Set the outcome variable 
+
+We have already loaded the SRBCT gene expression data and stored in $\boldsymbol X$.
+We need to store the factor indicating the sample class membership in $\boldsymbol Y$
+
+
+```{r results = 'hold', message=FALSE}
+Y <- srbct$class 
+length(Y)
+```
+
+
+## First pass: PLS-DA
+
+We  run a PLS-DA model that includes three components:
+```{r 01-plsda-final, reuslts = 'hide', fig.show='hide'}
+plsda.srbct <- plsda(X,Y, ncomp = 3)
+
+plotIndiv(plsda.srbct, ind.names = FALSE, legend=TRUE,
+          comp=c(1,2), 
+          title = 'PLS-DA on SRBCT comp 1-2')
+
+plotLoadings(plsda.srbct, 
+             contrib = 'max',  # max = which class has maximum mean (median) expression (vs. min)
+             method = 'mean',  # choose either mean or median
+             comp = 1,
+             ndisplay = 50)
+
+plotVar(plsda.srbct, cutoff = 0.7)  # variable plot (correlation circle plot)
+
+biplot(plsda.srbct, cutoff = 0.7)   # we set a correlation cutoff to only show the most contributing variables   
+
+boxplot(X[, 'g1932']~ Y)
+```
+
+
+## Exercise 2: Interpretation
+
+Run the code above, line by line.
+
+1. Interpret the sample plot. What do you notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Also inspect the sample plot for components 1 vs. 3.
+
+2. Loadings plot: what does each bar represent? Change the parameters `r contrib = 'max'` to `r contrib = 'min'`. Change the parameter `r comp = 1` to  `r comp = 2`. What do you observe? Now, interpret the loading plot in combination with the sample plot. Does the loading plot make sense in light of this additional information?
+
+3. Interpret the variable plot (correlation circle plot, refer to slides).
+
+4. Interpret the biplot.
+
+5. As a follow-up to the biplot interpretation, choose one gene and plot a boxplot with respect to the tumour subtype group (as shown). What is your interpretation?
+
+<button onclick="myFunction(&#39;q2&#39;)">
+
+Show solutions
+
+</button>
+
+::: {#q2 style="display:none"}
+
+#### Answer
+
+1.1 Amount of explained variance: while PCA maximises the variance of the components, PLSDA maximises the covariance (akin to correlation) between the data and the outcome, hence the amount of explained variance can be lower than PCA (especially in this case, as we have seen already that the major source of variation in the data is not attributable to tumour subtypes). 
+
+1.2 Sample plot: By default, the samples are coloured according to their class membership. Component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`, component 2 discriminates `r colorize("green", "RMS")` + `r colorize("grey", "NB")` vs. `r colorize("blue", "EWS")` + `r colorize("orange", "BL")`, while component 3 discriminates further the `r colorize("grey", "NB")` and `r colorize("orange", "BL")` groups. It is the combination of all three components that enables us to discriminate all classes.
+
+
+2.1 Loading plots: each bar represent the contribution (= coefficient) of each gene in each component. Her we only show the top 50 genes with the highest contribution (positive or negative sign, going from the bottom of the graph to the top). `r contrib = 'max'` colors the bars according to the tumour subtype for which the mean expression value is maximal. `r contrib = 'min'` colors the bars according to the tumour subtype for which the mean expression value is minimal. When we change to  `r comp = 2`, we observe a new set of genes and they are colored differently. 
+
+2.2 Loading plots and sample plot. From the sample plot we have observed that component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`. We observe the same trend at the gene level from the loading plot, showing that these genes are the one driving the separation between this group of samples. (similar interpretation for component 2).
+
+
+3. Variable plot: here we project the variables in the space spanned by the first two components by calculating the correlation between the variables, and the components (refer to slides). We only show the top genes with a correlation cutoff above 0.7 across both components. We observe a groups of genes that are positively correlated together (left and right hand side on the x-axis), and contribute to component 1 either negatively (left) or positively (right). These two groups are negatively correlated to each other. The trend is not as clear for component 2 (less genes and contribute less to component 2 on the y-axis).
+
+
+4. Biplot: overlays both samples (as dots) and variables (as arrows). Here we only show the top genes with a correlation cutoff above 0.7 across both components. We can now visualise the same set of genes as in the correlation circle plot, and how they relate (are over / under expressed) with the samples. 
+
+5. Genes that 'points' towards a specific group of samples tend to be overexpressed in these samples.
+
+:::
+
+<!-- end solutions -->
+
+
+
+# 6. Session Info
+
+```{r }
+sessionInfo()
+```
+
