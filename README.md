@@ -38,11 +38,7 @@ library(mixOmics)
 
 ### Material
 
-%[Click here](https://melbintgen.github.io/intro-to-linear-models/linear-models-master/Linear_model_slides.pdf) to access the slides.
 
-%[Click here](https://melbintgen.github.io/intro-to-linear-models/linear_models.html) to access the HTML workshop document.
 
-### Data
-%All data used for the workshop are in [data.zip](https://melbintgen.github.io/intro-to-linear-models/data.zip).
 
 
