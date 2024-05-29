@@ -13,7 +13,7 @@
 
 <meta name="date" content="2024-05-29" />
 
-<title>Introduction to multivariate analysis</title>
+<title>Introduction to multivariate analysis with mixOmics</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -2592,6 +2592,28 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
 
 
 
@@ -2750,7 +2772,8 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Introduction to multivariate analysis</h1>
+<h1 class="title toc-ignore">Introduction to multivariate analysis with
+mixOmics</h1>
 <h4 class="author">Kim-Anh Lê Cao</h4>
 <h4 class="date">29 May 2024</h4>
 
@@ -2783,15 +2806,16 @@ padding: 10px;
 <h1>Let’s get started</h1>
 <div id="id_01:install" class="section level2">
 <h2>Installation</h2>
-<p>First, download the latest version from Bioconductor:</p>
+<p>First, download the latest version from Bioconductor <span class="citation">(<a href="#ref-Roh17">Rohart et al.
+2017</a>)</span>:</p>
 <pre class="r"><code>if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))
     install.packages(&quot;BiocManager&quot;)
  BiocManager::install(&quot;mixOmics&quot;)</code></pre>
 <p>The <code>mixOmics</code> package should directly import the
 following packages:
-<code>igraph, rgl, ellipse, corpcor, RColorBrewer, plyr, parallel, dplyr, tidyr, reshape2, methods, matrixStats, rARPACK, gridExtra</code>.
-<strong>For Apple mac users:</strong> if you are unable to install the
-imported package <code>rgl</code>, you will need to install the <a href="https://www.xquartz.org">XQuartz software</a> first.</p>
+<code>igraph, rgl, ellipse, corpcor, RColorBrewer, plyr, parallel, dplyr, tidyr, reshape2, methods, matrixStats, rARPACK, gridExtra</code>.</p>
+<p><strong>For Apple mac users:</strong> if you are unable to install
+the imported package <code>rgl</code>, you will need to install the <a href="https://www.xquartz.org">XQuartz software</a> first.</p>
 </div>
 <div id="id_01:load-data" class="section level2">
 <h2>Load the package</h2>
@@ -2849,12 +2873,13 @@ genes in the <code>plotVar</code> correlation circle plot.</p>
 </div>
 <div id="id_01" class="section level1">
 <h1>1. PCA on the SRBCT case study</h1>
-<p>The Small Round Blue Cell Tumours (SRBCT) data set from <span class="citation">[@Kha01]</span> includes the expression levels of 2,308
-genes measured on 63 samples. The samples are divided into four classes:
-8 Burkitt Lymphoma (BL), 23 Ewing Sarcoma (EWS), 12 neuroblastoma (NB),
-and 20 rhabdomyosarcoma (RMS). The data are directly available in a
-processed and normalised format from the <code>mixOmics</code> package
-and contains the following:</p>
+<p>The Small Round Blue Cell Tumours (SRBCT) data set from <span class="citation">(<a href="#ref-Kha01">Khan et al. 2001</a>)</span>
+includes the expression levels of 2,308 genes measured on 63 samples.
+The samples are divided into four classes: 8 Burkitt Lymphoma (BL), 23
+Ewing Sarcoma (EWS), 12 neuroblastoma (NB), and 20 rhabdomyosarcoma
+(RMS). The data are directly available in a processed and normalised
+format from the <code>mixOmics</code> package and contains the
+following:</p>
 <ul>
 <li><p><code>$gene</code>: A data frame with 63 rows and 2,308 columns.
 These are the expression levels of 2,308 genes in 63 subjects,</p></li>
@@ -2864,7 +2889,7 @@ each individual (4 classes in total),</p></li>
 columns containing further information on the genes.</p></li>
 </ul>
 <p>More details can be found in <code>?srbct</code>.</p>
-<div id="id_01:load-data" class="section level2">
+<div id="load-the-data" class="section level2">
 <h2>Load the data</h2>
 <p>We first load the data from the package and store the gene expression
 data in a <span class="math inline">\(\boldsymbol X\)</span> object.</p>
@@ -2912,8 +2937,8 @@ data?</p></li>
 <p>Show solutions</p>
 </button>
 <div id="q1" style="display:none">
-<div id="answer" class="section level4">
-<h4>Answer</h4>
+<div id="answers" class="section level4">
+<h4>Answers</h4>
 <ol style="list-style-type: decimal">
 <li><p>The first two components explain 21.96% of the total variance.
 Based on the elbow method, we would choose 2 components.</p></li>
@@ -2928,13 +2953,14 @@ sample plot, with perhaps the exception of the <span style="color: #585858;">NB<
 other samples. This preliminary exploration teaches us two important
 findings:</p></li>
 </ol>
+<p>Conclusions:</p>
 <ul>
-<li>The major source of variation is not attributable to tumour type,
+<li><p>The major source of variation is not attributable to tumour type,
 but an unknown source (we tend to observe clusters of samples but those
-are not explained by tumour type).</li>
-<li>We need a more ‘directed’ (supervised) analysis to separate the
+are not explained by tumour type).</p></li>
+<li><p>We need a more ‘directed’ (supervised) analysis to separate the
 tumour types, and we should expect that the amount of variance explained
-by the dimensions in PLS-DA analysis will be small.</li>
+by the dimensions in PLS-DA analysis will be small.</p></li>
 </ul>
 </div>
 </div>
@@ -2950,7 +2976,6 @@ by the dimensions in PLS-DA analysis will be small.</li>
 factor indicating the sample class membership in <span class="math inline">\(\boldsymbol Y\)</span></p>
 <pre class="r"><code>Y &lt;- srbct$class 
 length(Y)</code></pre>
-<pre><code>## [1] 63</code></pre>
 </div>
 <div id="first-pass-pls-da" class="section level2">
 <h2>First pass: PLS-DA</h2>
@@ -2992,8 +3017,8 @@ is your interpretation?</p></li>
 <p>Show solutions</p>
 </button>
 <div id="q2" style="display:none">
-<div id="answer-1" class="section level4">
-<h4>Answer</h4>
+<div id="answers-1" class="section level4">
+<h4>Answers</h4>
 <p>1.1 Amount of explained variance: while PCA maximises the variance of
 the components, PLSDA maximises the covariance (akin to correlation)
 between the data and the outcome, hence the amount of explained variance
@@ -3017,8 +3042,7 @@ observed that component 1 discriminates <span style="color: #009E73;">RMS</span>
 level from the loading plot, showing that these genes are the one
 driving the separation between this group of samples. (similar
 interpretation for component 2).</p>
-<ol start="3" style="list-style-type: decimal">
-<li><p>Variable plot: here we project the variables in the space spanned
+<p>3 Variable plot: here we project the variables in the space spanned
 by the first two components by calculating the correlation between the
 variables, and the components (refer to slides). We only show the top
 genes with a correlation cutoff above 0.7 across both components. We
@@ -3026,15 +3050,14 @@ observe a groups of genes that are positively correlated together (left
 and right hand side on the x-axis), and contribute to component 1 either
 negatively (left) or positively (right). These two groups are negatively
 correlated to each other. The trend is not as clear for component 2
-(less genes and contribute less to component 2 on the y-axis).</p></li>
-<li><p>Biplot: overlays both samples (as dots) and variables (as
-arrows). Here we only show the top genes with a correlation cutoff above
-0.7 across both components. We can now visualise the same set of genes
-as in the correlation circle plot, and how they relate (are over / under
-expressed) with the samples.</p></li>
-<li><p>Genes that ‘points’ towards a specific group of samples tend to
-be overexpressed in these samples.</p></li>
-</ol>
+(less genes and contribute less to component 2 on the y-axis).</p>
+<p>4 Biplot: overlays both samples (as dots) and variables (as arrows).
+Here we only show the top genes with a correlation cutoff above 0.7
+across both components. We can now visualise the same set of genes as in
+the correlation circle plot, and how they relate (are over / under
+expressed) with the samples.</p>
+<p>5 Genes that ‘points’ towards a specific group of samples tend to be
+overexpressed in these samples.</p>
 </div>
 </div>
 <!-- end solutions -->
@@ -3043,9 +3066,18 @@ be overexpressed in these samples.</p></li>
 <h2>Sparse PLS-DA for variable selection</h2>
 <p>We run similar command lines, but this time we use <em>sparse
 PLS-DA</em> that will enable us to select the top discriminant
-variables. The variable selection process is done within PLS-DA. For
-this, we need to specify the number of variables to select per
-component.</p>
+variables.</p>
+<p>
+<div class="info">
+<p><strong>ⓘ Sparse means zeroes in the loading vectors </strong></p>
+<p><em>Sparse</em> stands for loading vectors that are sparse (include
+zeroes) because of we use lasso regularisation in the method <span class="citation">(<a href="#ref-Lec11">Lê Cao, Boitard, and Besse
+2011</a>)</span> so that only a subset of variables are used to
+calculate the components in the linear combination.</p>
+</div>
+</p>
+<p>The variable selection process is done within PLS-DA. For this, we
+need to specify the number of variables to select per component.</p>
 <pre class="r"><code>splsda.srbct &lt;- splsda(X,Y, ncomp = 3,
                        keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 30 on the third component
                        )
@@ -3058,6 +3090,7 @@ plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
              method = &#39;mean&#39;,  # choose either mean or median
              comp = 1)</code></pre>
 <pre class="r"><code>plotVar(splsda.srbct)  # variable plot (correlation circle plot)</code></pre>
+<pre class="r"><code>selectVar(splsda.srbct) #extracts the list of variables selected, and their loading weights</code></pre>
 </div>
 <div id="exercise-3-interpretation" class="section level2">
 <h2>Exercise 3: Interpretation</h2>
@@ -3072,13 +3105,14 @@ notice large changes?</p></li>
 <li><p>Conclude on the advantages / disadvantages of using sparse PLS-DA
 for variable selection.</p></li>
 </ol>
-<p>*note: sorry, we have a bug with the biplot!</p>
+<p><strong>Sorry!</strong> we currently have a bug with the biplot that
+we need to fix!</p>
 <button onclick="myFunction(&#39;q3&#39;)">
 <p>Show solutions</p>
 </button>
 <div id="q3" style="display:none">
-<div id="answer-2" class="section level4">
-<h4>Answer</h4>
+<div id="answers-2" class="section level4">
+<h4>Answers</h4>
 <ol style="list-style-type: decimal">
 <li><p>On the sample plot, the <span style="color: #585858;">NB</span>
 and <span style="color: #009E73;">RMS</span> are clustered together,
@@ -3097,7 +3131,7 @@ loading plot on component 3.</p></li>
 so), then the plots and trends remain the same. When the keepX values
 get very large, then we tend to obtain the same results as
 PLS-DA.</p></li>
-<li><p>Conclusion: sPLS-DA is able to identify key discriminative genes
+<li><p>Conclusion: sPLS-DA can help identifying key discriminative genes
 for each sample group. It does so by adopting a ‘one group’ vs ‘all’ (or
 1 group vs another group) per component. This enables us to identify
 which genes discriminate which class. The output results are usually
@@ -3105,15 +3139,237 @@ neater than a classic PLS-DA. The main challenge is to decide how many
 genes we should select per component. We do this using repeated
 cross-validation and estimating the classification error. This is
 outside the scope of this workshop, but you can have a look at our
-examples in <a href="http://mixomics.org/case-studies/splsda-srbct-case-study/" class="uri">http://mixomics.org/case-studies/splsda-srbct-case-study/</a>.</p></li>
+examples in <a href="http://mixomics.org/case-studies/splsda-srbct-case-study/" class="uri">http://mixomics.org/case-studies/splsda-srbct-case-study/</a>.
+There are also functions in mixOmics to estimate the classification
+performance of the final sPLS-DA.</p></li>
 </ol>
 </div>
 </div>
 <!-- end solutions -->
 </div>
 </div>
+<div id="diablo-to-integrate-multi-omics-datasets" class="section level1">
+<h1>3. DIABLO to integrate multi-omics datasets</h1>
+<p>DIABLO is a a method to integrate multiple data sets while explaining
+their relationship with a categorical outcome variable. DIABLO stands
+for <strong>D</strong>ata <strong>I</strong>ntegration
+<strong>A</strong>nalysis for <strong>B</strong>iomarker discovery using
+<strong>L</strong>atent variable approaches for <strong>O</strong>mics
+studies <span class="citation">(<a href="#ref-Sin19">Singh et al.
+2019</a>)</span>. It can also be referred to as Multiblock
+(s)PLS-DA.</p>
+<p>
+<div class="info">
+<p><strong>ⓘ We need the same samples across all omics</strong></p>
+<p>One pre-requisite of DIABLO is that the same samples / individuals
+should be measured across all omics. This is because we are looking for
+correlation / covariance between the data sets by calculating the
+covariance between components (all of length <span class="math inline">\(N\)</span>, the number of samples).</p>
+</div>
+</p>
+<div id="id_03:diablo" class="section level2">
+<h2>TCGA case study</h2>
+<p>Human breast cancer is a heterogeneous disease in terms of molecular
+alterations, cellular composition, and clinical outcome. Breast tumours
+can be classified into several subtypes, according to their levels of
+mRNA expression <span class="citation">(<a href="#ref-Sor01">Sørlie et
+al. 2001</a>)</span>. Here we consider a subset of data generated by The
+Cancer Genome Atlas Network <span class="citation">(<a href="#ref-TCGA12">Cancer Genome Atlas Network et al. 2012</a>)</span>.
+For the package, data were normalised, and then drastically prefiltered
+for illustrative purposes.</p>
+<p>The data were divided into a <em>training set</em> with a subset of
+150 samples from the mRNA, miRNA and proteomics data, and a <em>test
+set</em> including 70 samples, but only with mRNA and miRNA data (the
+proteomics data are missing). The aim of this integrative analysis is to
+identify a highly correlated multi-omics signature discriminating the
+breast cancer subtypes Basal, Her2 and LumA.</p>
+<p>The <code>breast.TCGA</code> (more details can be found in
+<code>?breast.TCGA</code>) is a list containing training and test sets
+of omics data <code>data.train</code> and <code>data.test</code> which
+include:</p>
+<ul>
+<li><code>$miRNA</code>: A data frame with 150 (70) rows and 184 columns
+in the training (test) data set for the miRNA expression levels,</li>
+<li><code>$mRNA</code>: A data frame with 150 (70) rows and 520 columns
+in the training (test) data set for the mRNA expression levels,</li>
+<li><code>$protein</code>: A data frame with 150 rows and 142 columns in
+the training data set for the protein abundance (there are no proteomics
+in the test set),</li>
+<li><code>$subtype</code>: A factor indicating the breast cancer
+subtypes in the training (for 150 samples) and test sets (for 70
+samples).</li>
+</ul>
+<p>This case study covers an interesting scenario where one omic data
+set is missing in the test set, but because the method generates a set
+of components per training data set, we can still assess the prediction
+or performance evaluation using majority or weighted prediction
+vote.</p>
+</div>
+<div id="id_03:diablo-load-data" class="section level2">
+<h2>Load the data</h2>
+<p>We will integrate the expression levels of miRNA, mRNA and the
+abundance of proteins while discriminating the subtypes of breast
+cancer, then predict the subtypes of the samples in the test set.</p>
+<p>Each omics data matrix is stored into a list of matrices <span class="math inline">\(\boldsymbol X\)</span>. Each data frame in <span class="math inline">\(\boldsymbol X\)</span> <em>should be named</em> as
+we will match these names with the <code>keepX</code> parameter for
+variable selection. A factor indicating the class membership of each
+sample is stored in <span class="math inline">\(\boldsymbol
+Y\)</span>.</p>
+<pre class="r"><code>data(breast.TCGA)
+
+# Extract training data and name each data frame
+# Store as list
+X &lt;- list(mRNA = breast.TCGA$data.train$mrna, 
+          miRNA = breast.TCGA$data.train$mirna, 
+          protein = breast.TCGA$data.train$protein)
+
+# Outcome
+Y &lt;- breast.TCGA$data.train$subtype
+summary(Y)</code></pre>
+<pre><code>## Basal  Her2  LumA 
+##    45    30    75</code></pre>
+</div>
+<div id="set-the-design-matrix" class="section level2">
+<h2>Set the design matrix</h2>
+<p>In DIABLO, we need to specify a design matrix that indicates what is
+the level of correlation we wish to extract between datasets. In the
+example below, we ask for a small amount of correlation between these
+data sets.</p>
+<pre class="r"><code>design &lt;- matrix(0.1, ncol = length(X), nrow = length(X), 
+                dimnames = list(names(X), names(X)))
+diag(design) &lt;- 0
+design </code></pre>
+<pre><code>##         mRNA miRNA protein
+## mRNA     0.0   0.1     0.1
+## miRNA    0.1   0.0     0.1
+## protein  0.1   0.1     0.0</code></pre>
+</div>
+<div id="diablo" class="section level2">
+<h2>DIABLO</h2>
+<p>Here we decide to run a model with 2 components. The number of
+variables to keep is listed below in <code>keepX</code> (we have decided
+on this based on tuning calculation based on repeated cross-validation.
+More details available on our website).</p>
+<pre class="r"><code># number of variables to select per dataset and per component (here 2 comps)
+list.keepX &lt;- list( mRNA = c(8, 25), miRNA = c(14,5), protein = c(10, 5))
+
+diablo.tcga &lt;- block.splsda(X, Y, ncomp = 2, 
+                            keepX = list.keepX, design = design)</code></pre>
+<pre><code>## Design matrix has changed to include Y; each block will be
+##             linked to Y.</code></pre>
+<pre class="r"><code># the message tells us that each data set will be linked to the outcome Y for maximal discrimination
+
+# sample plots:
+plot(diablo.tcga) # pairs of components across datasets and their correlation</code></pre>
+<pre class="r"><code>plotIndiv(diablo.tcga, ind.names = FALSE, legend = TRUE)</code></pre>
+<pre class="r"><code># variable plots:
+plotVar(diablo.tcga, legend = TRUE)</code></pre>
+<pre class="r"><code>circosPlot(diablo.tcga, , cutoff = 0.7)</code></pre>
+<pre class="r"><code>plotLoadings(diablo.tcga, contrib = &#39;max&#39;,  # max = which class has maximum mean (median) expression (vs. min)
+             method = &#39;mean&#39;,  # choose either mean or median
+             comp = 1)</code></pre>
+<pre class="r"><code># variable selection
+selectVar(diablo.tcga)</code></pre>
+</div>
+<div id="exercise-4-interpretation" class="section level2">
+<h2>Exercise 4: Interpretation</h2>
+<p>Run the code above, line by line.</p>
+<ol style="list-style-type: decimal">
+<li><p>Sample plots: What do the sample plots <code>plot</code> and
+<code>plotIndiv</code> tell you about the ability of DIABLO to extract
+correlated information between data sets <em>and</em> to discriminate
+sample groups? Are there datasets that are more noisy than others?
+(remember that we decompose each data matrix with a set of components,
+and loading vectors).</p></li>
+<li><p>Variable plots: What do the variable plots <code>plotVar</code>
+and <code>circosPlot</code> tell you about the correlation between the
+variables that were selected by DIABLO?</p></li>
+<li><p>Loading plots: inspect the loading plots for components 1 and 2.
+What are the discriminative properties of the variables selected on
+component 1? and component 2? (the function <code>selectVar</code>
+outputs the list of variables selected, and their loading
+weights)</p></li>
+</ol>
+<button onclick="myFunction(&#39;q4&#39;)">
+<p>Show solutions</p>
+</button>
+<div id="q4" style="display:none">
+<div id="answers-3" class="section level4">
+<h4>Answers</h4>
+<p>1.1 The <code>plot</code> output tells use that the mRNA and protein
+data sets are the most correlated. The least correlated pair is miRNA
+and protein. On component 1, DIABLO is able to extract correlated
+information between the data sets, and we observe some separation
+between the sample groups.</p>
+<p>1.2 The <code>plotIndiv</code> output plots the set of components per
+data set. The mRNA and the protein datasets have some good
+discriminative properties. The miRNA dataset is a bit more noisy.</p>
+<p>2.1 The variable plot <code>plotVar</code> shows a high positive
+correlation between miRNAs and a few proteins and one mRNA (x-axis,
+right hand side) or between mRNA and proteins (x-axis, left hand side).
+These groups are negatively correlated together, as they are either
+overexpressed in <span style="color: #388ECC;">Basal</span> or <span style="color: #585858;">LumA</span> (confirmed in the loading
+plots).</p>
+<p>2.2 The variable plot <code>circosPlot</code> shows mostly a negative
+correlation between some of the variables, with a cutoff of 0.7.</p>
+<p>3 According to the loading plot, the variables selected by DIABLO on
+component 1 discriminate <span style="color: #388ECC;">Basal</span>(positive loading value) vs. <span style="color: #585858;">LumA</span> (negative loading value), whereas
+the variables selected by DIABLO on component 2 discriminate <span style="color: #F68B33;">Her2</span>(positive loading value) vs. the two
+other groups (negative loading value).</p>
+</div>
+</div>
+<!-- end solutions -->
+</div>
+<div id="prediction-on-the-test-set-optional" class="section level2">
+<h2>Prediction on the test set (optional)</h2>
+<p>The <code>predict</code> function associated predicts the class of
+samples from an external test set. In our specific case, one data set
+(proteomics) is missing in the test set but the method can still be
+applied. We need to ensure the names of the blocks correspond exactly to
+those from the training set:</p>
+<pre class="r"><code># Prepare test set data: here one block (proteins) is missing
+data.test.tcga &lt;- list(mRNA = breast.TCGA$data.test$mrna, 
+                      miRNA = breast.TCGA$data.test$mirna)
+
+predict.diablo.tcga &lt;- predict(diablo.tcga, newdata = data.test.tcga)
+# The warning message will inform us that one block is missing
+
+predict.diablo.tcga # Lists the different outputs</code></pre>
+<p>The following output is a confusion matrix that compares the real
+subtypes with the predicted subtypes from our trained DIABLO model on
+the second component for the prediction distance
+<code>centroids.dist</code> and the prediction scheme
+<code>WeightedVote</code> (each dataset casts a vote):</p>
+<pre class="r"><code>confusion.mat.tcga &lt;- get.confusion_matrix(truth = breast.TCGA$data.test$subtype, 
+                     predicted = predict.diablo.tcga$WeightedVote$centroids.dist[,2]) # 2nd component
+confusion.mat.tcga</code></pre>
+<pre><code>##       predicted.as.Basal predicted.as.Her2 predicted.as.LumA
+## Basal                 20                 1                 0
+## Her2                   0                13                 1
+## LumA                   0                 3                32</code></pre>
+<p>From this table, we see that one Basal and one Her2 sample are
+wrongly predicted as Her2 and Lum A respectively, and 3 LumA samples are
+wrongly predicted as Her2. The balanced prediction error rate can be
+obtained as:</p>
+<pre class="r"><code>get.BER(confusion.mat.tcga)</code></pre>
+<pre><code>## [1] 0.06825397</code></pre>
+<p>It would be worthwhile at this stage to revisit the chosen design of
+DIABLO to assess the influence of the design on the prediction
+performance on this test set - even though this back and forth analysis
+is a biased criterion to choose the design!</p>
+</div>
+<div id="to-go-further" class="section level2">
+<h2>To go further</h2>
+<p>We have not discussed how to choose the number of components, or the
+number of variables <code>keepX</code> to select on each dataset. This
+requires repeated cross-validation. More details on the tuning, and the
+classification performance of the method can be found here: <a href="http://mixomics.org/mixdiablo/diablo-tcga-case-study/" class="uri">http://mixomics.org/mixdiablo/diablo-tcga-case-study/</a></p>
+<p>Further details, analyses and vignette are avaiable on
+www.mixOmics.org</p>
+</div>
+</div>
 <div id="session-info" class="section level1">
-<h1>6. Session Info</h1>
+<h1>Session Info</h1>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.3.2 (2023-10-31)
 ## Platform: aarch64-apple-darwin20 (64-bit)
@@ -3156,6 +3412,45 @@ examples in <a href="http://mixomics.org/case-studies/splsda-srbct-case-study/" 
 ## [49] xfun_0.44           tibble_3.2.1        tidyselect_1.2.0   
 ## [52] farver_2.1.1        htmltools_0.5.8.1   igraph_2.0.1.1     
 ## [55] labeling_0.4.3      rmarkdown_2.27      compiler_4.3.2</code></pre>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-TCGA12" class="csl-entry">
+Cancer Genome Atlas Network et al. 2012. <span>“Comprehensive Molecular
+Portraits of Human Breast Tumours.”</span> <em>Nature</em> 490 (7418):
+61–70.
+</div>
+<div id="ref-Kha01" class="csl-entry">
+Khan, Javed, Jun S Wei, Markus Ringner, Lao H Saal, Marc Ladanyi, Frank
+Westermann, Frank Berthold, et al. 2001. <span>“Classification and
+Diagnostic Prediction of Cancers Using Gene Expression Profiling and
+Artificial Neural Networks.”</span> <em>Nature Medicine</em> 7 (6):
+673–79.
+</div>
+<div id="ref-Lec11" class="csl-entry">
+Lê Cao, Kim-Anh, Simon Boitard, and Philippe Besse. 2011. <span>“Sparse
+<span>PLS</span> <span>D</span>iscriminant <span>A</span>nalysis:
+Biologically Relevant Feature Selection and Graphical Displays for
+Multiclass Problems.”</span> <em>BMC Bioinformatics</em> 12 (1): 253.
+</div>
+<div id="ref-Roh17" class="csl-entry">
+Rohart, Florian, Benoit Gautier, Amrit Singh, and Kim-Anh Lê Cao. 2017.
+<span>“mixOmics: An r Package for ‘Omics Feature Selection and Multiple
+Data Integration.”</span> <em>PLoS Computational Biology</em> 13 (11):
+e1005752.
+</div>
+<div id="ref-Sin19" class="csl-entry">
+Singh, Amrit, Casey P Shannon, Benoı̂t Gautier, Florian Rohart, Michaël
+Vacher, Scott J Tebbutt, and Kim-Anh Lê Cao. 2019. <span>“DIABLO: An
+Integrative Approach for Identifying Key Molecular Drivers from
+Multi-Omics Assays.”</span> <em>Bioinformatics</em> 35 (17): 3055–62.
+</div>
+<div id="ref-Sor01" class="csl-entry">
+Sørlie, Therese, Charles M Perou, Robert Tibshirani, Turid Aas,
+Stephanie Geisler, Hilde Johnsen, Trevor Hastie, et al. 2001.
+<span>“Gene Expression Patterns of Breast Carcinomas Distinguish Tumor
+Subclasses with Clinical Implications.”</span> <em>Proceedings of the
+National Academy of Sciences</em> 98 (19): 10869–74.
+</div>
+</div>
 </div>
 
 
