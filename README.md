@@ -1,8 +1,8 @@
 # MIG workshop: multivariate analysis with mixOmics
 
-**Author: Prof Kim-Anh Lê Cao**
+### Author: Prof Kim-Anh Lê Cao
 
-**Tutors: Dr Saritha Kodikara**
+
 
 | Audience      | Prerequisites | Duration    |
 | ------------- | ------------- | ----------- |
