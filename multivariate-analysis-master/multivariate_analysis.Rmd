@@ -229,7 +229,7 @@ Run the code above, line by line.
 
 2. How is a sample plot obtained in PCA? What does it represent?
 
-3. Interpret the sample plot outputs (the simple version first, then the advanced version). What is the major source of variation in the data?
+3. Interpret the sample plot outputs (the simple version first, then the advanced version, as shown in the code). What is the major source of variation in the data?
 
 <button onclick="myFunction(&#39;q1&#39;)">
 
@@ -239,7 +239,7 @@ Show solutions
 
 ::: {#q1 style="display:none"}
 
-#### Answers
+### Answers
 
 1. The first two components explain `r round(pca.srbct$cum.var[2]*100, 2)`% of the total variance. Based on the elbow method, we would choose 2 components.
 
@@ -296,19 +296,19 @@ boxplot(X[, 'g1932']~ Y)
 ```
 
 
-## Exercise 2: Interpretation
+## Demo and interpretation
 
-Run the code above, line by line.
+Let's run all the command lines above and discuss about the following points:
 
-1. Interpret the sample plot. What do you notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Also inspect the sample plot for components 1 vs. 3.
+1. Interpretation of the sample plot. What do we notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Let's also the sample plot for components 1 vs. 3.
 
-2. Loadings plot: what does each bar represent? Change the parameters `r contrib = 'max'` to `r contrib = 'min'`. Change the parameter `r comp = 1` to  `r comp = 2`. What do you observe? Now, interpret the loading plot in combination with the sample plot. Does the loading plot make sense in light of this additional information?
+2. Loadings plot: what does each bar represent? Let's change the parameters `contrib = 'max'` to `contrib = 'min'`. Let's now change the parameter `comp = 1` to  `comp = 2`. What do we observe? Now, let's interpret the loading plot in combination with the sample plot. Does the loading plot make sense in light of this additional information?
 
-3. Interpret the variable plot (correlation circle plot, refer to slides).
+3. Interpretation of the variable plot (correlation circle plot, refer to slides).
 
-4. Interpret the biplot.
+4. Interpretation of the biplot.
 
-5. As a follow-up to the biplot interpretation, choose one gene and plot a boxplot with respect to the tumour subtype group (as shown). What is your interpretation?
+5. As a follow-up to the biplot interpretation, let's one gene and plot a boxplot with respect to the tumour subtype group (as shown). What is the link between how the gene is located on the biplot, and its expression levels per sample group?
 
 <button onclick="myFunction(&#39;q2&#39;)">
 
@@ -318,7 +318,7 @@ Show solutions
 
 ::: {#q2 style="display:none"}
 
-#### Answers
+### Interpretation
 
 1.1 Amount of explained variance: while PCA maximises the variance of the components, PLSDA maximises the covariance (akin to correlation) between the data and the outcome, hence the amount of explained variance can be lower than PCA (especially in this case, as we have seen already that the major source of variation in the data is not attributable to tumour subtypes). 
 
@@ -326,7 +326,7 @@ Show solutions
 
 2.1 Loading plots: each bar represent the contribution (= coefficient) of each gene in each component. Her we only show the top 50 genes with the highest contribution (positive or negative sign, going from the bottom of the graph to the top). `r contrib = 'max'` colors the bars according to the tumour subtype for which the mean expression value is maximal. `r contrib = 'min'` colors the bars according to the tumour subtype for which the mean expression value is minimal. When we change to  `r comp = 2`, we observe a new set of genes and they are colored differently. 
 
-2.2 Loading plots and sample plot. From the sample plot we have observed that component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`. We observe the same trend at the gene level from the loading plot, showing that these genes are the one driving the separation between this group of samples. (similar interpretation for component 2).
+2.2 Loading plots and sample plot. From the sample plot we have observed that component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`. We observe the same trend at the gene level from the loading plot, showing that these genes are the one driving the separation between this group of samples. (similar interpretation for component 2). Hence, the loading plot confirms what we have observed at the sample level on the sample plot.
 
 3 Variable plot: here we project the variables in the space spanned by the first two components by calculating the correlation between the variables, and the components (refer to slides). We only show the top genes with a correlation cutoff above 0.7 across both components. We observe a groups of genes that are positively correlated together (left and right hand side on the x-axis), and contribute to component 1 either negatively (left) or positively (right). These two groups are negatively correlated to each other. The trend is not as clear for component 2 (less genes and contribute less to component 2 on the y-axis).
 
@@ -377,13 +377,13 @@ plotVar(splsda.srbct)  # variable plot (correlation circle plot)
 selectVar(splsda.srbct) #extracts the list of variables selected, and their loading weights
 ```
 
-## Exercise 3: Interpretation
+## Exercise 2 on sPLS-DA: Interpretation
 
 Run the code above, line by line.
 
-1. What are the differences that you observe, compared to the full PLS-DA run previously (i.e with no variable selection). 
+1. What are the differences that you observe across all outputs, compared to the full PLS-DA run previously (i.e with no variable selection). 
 
-2. Plot a sample plot for components 1. vs 3, what do you observe? Also plot the loadings for component 3.
+2. Plot a sample plot for components 1. vs 3, what do you observe? Also plot the loadings for component 3 for more insights.
 
 2. Change the values of the `keepX` argument, do you notice large changes?
 
@@ -399,11 +399,11 @@ Show solutions
 
 ::: {#q3 style="display:none"}
 
-#### Answers
+### Answers
 
 1. On the sample plot, the `r colorize("grey", "NB")` and `r colorize("green", "RMS")` are clustered together, whereas the other groups are well separated from each other. Component 1 discriminates  `r colorize("orange", "BL")` vs. the other classes. Component 2 discriminates mostly `r colorize("orange", "BL")` vs `r colorize("blue", "EWS")` vs the others. The loading plot is now much clearer (only one color shown on each side of the positive / negative sign). The loading plot only shows the variables that were selected on each component. Similarly for the correlation circle plot, genes are now better aligned on either the x- or y- axis with stronger contribution.
 
-2. Sample plot of comp 1 vs comp 2 now shows a clearer separation on comp 3 of `r colorize("grey", "NB")` vs. `r colorize("green", "RMS")`. This is also reflected in the loading plot on component 3.
+2. Sample plot of comp 1 vs comp 3 shows a clearer separation of `r colorize("grey", "NB")` vs. `r colorize("green", "RMS")` compared to COmp 1 vs Comp 3. This is also reflected in the loading plot on component 3.
 
 3. If we stick to values that are not too large (i.e up to 50 or so), then the plots and trends remain the same. When the keepX values get very large, then we tend to obtain the same results as PLS-DA.
 
@@ -506,7 +506,7 @@ selectVar(diablo.tcga)
 
 
 
-## Exercise 4: Interpretation
+## Exercise 3: Interpretation
 
 Run the code above, line by line.
 

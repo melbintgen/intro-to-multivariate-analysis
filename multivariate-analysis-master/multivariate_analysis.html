@@ -2930,15 +2930,15 @@ plotIndiv(pca.srbct,
 <li><p>How is a sample plot obtained in PCA? What does it
 represent?</p></li>
 <li><p>Interpret the sample plot outputs (the simple version first, then
-the advanced version). What is the major source of variation in the
-data?</p></li>
+the advanced version, as shown in the code). What is the major source of
+variation in the data?</p></li>
 </ol>
 <button onclick="myFunction(&#39;q1&#39;)">
 <p>Show solutions</p>
 </button>
 <div id="q1" style="display:none">
-<div id="answers" class="section level4">
-<h4>Answers</h4>
+<div id="answers" class="section level3">
+<h3>Answers</h3>
 <ol style="list-style-type: decimal">
 <li><p>The first two components explain 21.96% of the total variance.
 Based on the elbow method, we would choose 2 components.</p></li>
@@ -2994,31 +2994,34 @@ plotIndiv(plsda.srbct, ind.names = FALSE, legend=TRUE,
 <pre class="r"><code>biplot(plsda.srbct, cutoff = 0.7)   # we set a correlation cutoff to only show the most contributing variables   </code></pre>
 <pre class="r"><code>boxplot(X[, &#39;g1932&#39;]~ Y)</code></pre>
 </div>
-<div id="exercise-2-interpretation" class="section level2">
-<h2>Exercise 2: Interpretation</h2>
-<p>Run the code above, line by line.</p>
+<div id="demo-and-interpretation" class="section level2">
+<h2>Demo and interpretation</h2>
+<p>Let’s run all the command lines above and discuss about the following
+points:</p>
 <ol style="list-style-type: decimal">
-<li><p>Interpret the sample plot. What do you notice regarding the
-amount of explained variance per component, compared to PCA. Is this
-expected? Also inspect the sample plot for components 1 vs. 3.</p></li>
-<li><p>Loadings plot: what does each bar represent? Change the
-parameters to . Change the parameter to . What do you observe? Now,
-interpret the loading plot in combination with the sample plot. Does the
-loading plot make sense in light of this additional
-information?</p></li>
-<li><p>Interpret the variable plot (correlation circle plot, refer to
-slides).</p></li>
-<li><p>Interpret the biplot.</p></li>
-<li><p>As a follow-up to the biplot interpretation, choose one gene and
+<li><p>Interpretation of the sample plot. What do we notice regarding
+the amount of explained variance per component, compared to PCA. Is this
+expected? Let’s also the sample plot for components 1 vs. 3.</p></li>
+<li><p>Loadings plot: what does each bar represent? Let’s change the
+parameters <code>contrib = &#39;max&#39;</code> to <code>contrib = &#39;min&#39;</code>.
+Let’s now change the parameter <code>comp = 1</code> to
+<code>comp = 2</code>. What do we observe? Now, let’s interpret the
+loading plot in combination with the sample plot. Does the loading plot
+make sense in light of this additional information?</p></li>
+<li><p>Interpretation of the variable plot (correlation circle plot,
+refer to slides).</p></li>
+<li><p>Interpretation of the biplot.</p></li>
+<li><p>As a follow-up to the biplot interpretation, let’s one gene and
 plot a boxplot with respect to the tumour subtype group (as shown). What
-is your interpretation?</p></li>
+is the link between how the gene is located on the biplot, and its
+expression levels per sample group?</p></li>
 </ol>
 <button onclick="myFunction(&#39;q2&#39;)">
 <p>Show solutions</p>
 </button>
 <div id="q2" style="display:none">
-<div id="answers-1" class="section level4">
-<h4>Answers</h4>
+<div id="interpretation" class="section level3">
+<h3>Interpretation</h3>
 <p>1.1 Amount of explained variance: while PCA maximises the variance of
 the components, PLSDA maximises the covariance (akin to correlation)
 between the data and the outcome, hence the amount of explained variance
@@ -3041,7 +3044,8 @@ genes and they are colored differently.</p>
 observed that component 1 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #388ECC;">EWS</span> vs. <span style="color: #585858;">NB</span> + <span style="color: #F68B33;">BL</span>. We observe the same trend at the gene
 level from the loading plot, showing that these genes are the one
 driving the separation between this group of samples. (similar
-interpretation for component 2).</p>
+interpretation for component 2). Hence, the loading plot confirms what
+we have observed at the sample level on the sample plot.</p>
 <p>3 Variable plot: here we project the variables in the space spanned
 by the first two components by calculating the correlation between the
 variables, and the components (refer to slides). We only show the top
@@ -3092,14 +3096,15 @@ plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
 <pre class="r"><code>plotVar(splsda.srbct)  # variable plot (correlation circle plot)</code></pre>
 <pre class="r"><code>selectVar(splsda.srbct) #extracts the list of variables selected, and their loading weights</code></pre>
 </div>
-<div id="exercise-3-interpretation" class="section level2">
-<h2>Exercise 3: Interpretation</h2>
+<div id="exercise-2-on-spls-da-interpretation" class="section level2">
+<h2>Exercise 2 on sPLS-DA: Interpretation</h2>
 <p>Run the code above, line by line.</p>
 <ol style="list-style-type: decimal">
-<li><p>What are the differences that you observe, compared to the full
-PLS-DA run previously (i.e with no variable selection).</p></li>
+<li><p>What are the differences that you observe across all outputs,
+compared to the full PLS-DA run previously (i.e with no variable
+selection).</p></li>
 <li><p>Plot a sample plot for components 1. vs 3, what do you observe?
-Also plot the loadings for component 3.</p></li>
+Also plot the loadings for component 3 for more insights.</p></li>
 <li><p>Change the values of the <code>keepX</code> argument, do you
 notice large changes?</p></li>
 <li><p>Conclude on the advantages / disadvantages of using sparse PLS-DA
@@ -3111,8 +3116,8 @@ we need to fix!</p>
 <p>Show solutions</p>
 </button>
 <div id="q3" style="display:none">
-<div id="answers-2" class="section level4">
-<h4>Answers</h4>
+<div id="answers-1" class="section level3">
+<h3>Answers</h3>
 <ol style="list-style-type: decimal">
 <li><p>On the sample plot, the <span style="color: #585858;">NB</span>
 and <span style="color: #009E73;">RMS</span> are clustered together,
@@ -3124,9 +3129,9 @@ negative sign). The loading plot only shows the variables that were
 selected on each component. Similarly for the correlation circle plot,
 genes are now better aligned on either the x- or y- axis with stronger
 contribution.</p></li>
-<li><p>Sample plot of comp 1 vs comp 2 now shows a clearer separation on
-comp 3 of <span style="color: #585858;">NB</span> vs. <span style="color: #009E73;">RMS</span>. This is also reflected in the
-loading plot on component 3.</p></li>
+<li><p>Sample plot of comp 1 vs comp 3 shows a clearer separation of
+<span style="color: #585858;">NB</span> vs. <span style="color: #009E73;">RMS</span> compared to COmp 1 vs Comp 3. This is
+also reflected in the loading plot on component 3.</p></li>
 <li><p>If we stick to values that are not too large (i.e up to 50 or
 so), then the plots and trends remain the same. When the keepX values
 get very large, then we tend to obtain the same results as
@@ -3271,8 +3276,8 @@ plotVar(diablo.tcga, legend = TRUE)</code></pre>
 <pre class="r"><code># variable selection
 selectVar(diablo.tcga)</code></pre>
 </div>
-<div id="exercise-4-interpretation" class="section level2">
-<h2>Exercise 4: Interpretation</h2>
+<div id="exercise-3-interpretation" class="section level2">
+<h2>Exercise 3: Interpretation</h2>
 <p>Run the code above, line by line.</p>
 <ol style="list-style-type: decimal">
 <li><p>Sample plots: What do the sample plots <code>plot</code> and
@@ -3294,7 +3299,7 @@ weights)</p></li>
 <p>Show solutions</p>
 </button>
 <div id="q4" style="display:none">
-<div id="answers-3" class="section level4">
+<div id="answers-2" class="section level4">
 <h4>Answers</h4>
 <p>1.1 The <code>plot</code> output tells use that the mRNA and protein
 data sets are the most correlated. The least correlated pair is miRNA
