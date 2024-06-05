@@ -199,7 +199,7 @@ dim(X)  # check dimension
 
 ## Exploration with PCA {#01:plsda-pca}
 
-PCA is a useful tool to explore the gene expression data and to assess for sample similarities between tumour types sotred in `srbct$class`. Remember that PCA is an unsupervised approach, but we can colour the samples by their tumour subtype to assist in interpreting the PCA (Figure \@ref(fig:01-plsda-pca)). Here we center (default argument) and scale the data:
+PCA is a useful tool to explore the gene expression data and to assess for sample similarities between tumour types sotred in `srbct$class`. Remember that PCA is an unsupervised approach, but we can colour the samples by their tumour subtype to assist in interpreting the PCA. Here we center (default argument) and scale the data:
 
 ```{r 01-plsda-pca, fig.cap='(ref:01-plsda-pca)', fig.show='hide', results = 'hide'}
 pca.srbct <- pca(X, ncomp = 10, scale = TRUE)
@@ -247,11 +247,9 @@ Show solutions
 
 3. The tumour types are not clustered, meaning that the major source of variation cannot be explained by tumour types. Instead, samples seem to cluster according to an unknown source of variation. We observe almost no separation between the different tumour types in the PCA sample plot, with perhaps the exception of the `r colorize("grey", "NB")` samples that tend to cluster with other samples. This preliminary exploration teaches us two important findings:
 
-Conclusions:
-
 - The major source of variation is not attributable to tumour type, but an unknown source (we tend to observe clusters of samples but those are not explained by tumour type). 
 
-- We need a more 'directed' (supervised) analysis to separate the tumour types, and we should expect that the amount of variance explained by the dimensions in PLS-DA analysis will be small.
+- We need a more 'directed' (supervised) analysis to separate the tumour types, and we should expect that the amount of variance explained by the dimensions in PLS-DA analysis will be small since they will be focusing on discriminating the sample groups.
 :::
 
 <!-- end solutions -->
@@ -300,7 +298,7 @@ boxplot(X[, 'g1932']~ Y)
 
 Let's run all the command lines above and discuss about the following points:
 
-1. Interpretation of the sample plot. What do we notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Let's also the sample plot for components 1 vs. 3.
+1. Interpretation of the sample plot. What do we notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Let's also the sample plot for component 1 vs. 3.
 
 2. Loadings plot: what does each bar represent? Let's change the parameters `contrib = 'max'` to `contrib = 'min'`. Let's now change the parameter `comp = 1` to  `comp = 2`. What do we observe? Now, let's interpret the loading plot in combination with the sample plot. Does the loading plot make sense in light of this additional information?
 
@@ -360,7 +358,7 @@ The variable selection process is done within PLS-DA. For this, we need to speci
 
 ```{r 02-splsda, results = 'hide', fig.show='hide'}
 splsda.srbct <- splsda(X,Y, ncomp = 3,
-                       keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 30 on the third component
+                       keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 10 on the third component
                        )
 
 plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
@@ -383,7 +381,7 @@ Run the code above, line by line.
 
 1. What are the differences that you observe across all outputs, compared to the full PLS-DA run previously (i.e with no variable selection). 
 
-2. Plot a sample plot for components 1. vs 3, what do you observe? Also plot the loadings for component 3 for more insights.
+2. Plot a sample plot for component 1 vs 3, what do you observe? Also plot the loadings for component 3 for more insights.
 
 2. Change the values of the `keepX` argument, do you notice large changes?
 
@@ -403,7 +401,7 @@ Show solutions
 
 1. On the sample plot, the `r colorize("grey", "NB")` and `r colorize("green", "RMS")` are clustered together, whereas the other groups are well separated from each other. Component 1 discriminates  `r colorize("orange", "BL")` vs. the other classes. Component 2 discriminates mostly `r colorize("orange", "BL")` vs `r colorize("blue", "EWS")` vs the others. The loading plot is now much clearer (only one color shown on each side of the positive / negative sign). The loading plot only shows the variables that were selected on each component. Similarly for the correlation circle plot, genes are now better aligned on either the x- or y- axis with stronger contribution.
 
-2. Sample plot of comp 1 vs comp 3 shows a clearer separation of `r colorize("grey", "NB")` vs. `r colorize("green", "RMS")` compared to COmp 1 vs Comp 3. This is also reflected in the loading plot on component 3.
+2. Sample plot of comp 1 vs comp 3 shows a clearer separation of `r colorize("grey", "NB")` vs. `r colorize("green", "RMS")` compared to Comp 1 vs Comp 2. This is also reflected in the loading plot on component 3.
 
 3. If we stick to values that are not too large (i.e up to 50 or so), then the plots and trends remain the same. When the keepX values get very large, then we tend to obtain the same results as PLS-DA.
 
@@ -510,7 +508,7 @@ selectVar(diablo.tcga)
 
 Run the code above, line by line.
 
-1. Sample plots: What do the sample plots `plot` and `plotIndiv` tell you about the ability of DIABLO to extract correlated information between data sets *and* to discriminate sample groups? Are there datasets that are more noisy than others? (remember that we decompose each data matrix with a set of components, and loading vectors).
+1. Sample plots: What do the sample plots `plot` and `plotIndiv` tell you about the ability of DIABLO to extract correlated information between data sets *and* to discriminate sample groups? Are there datasets that are more noisy than others? (remember that we decompose each data matrix with a set of components, and loading vectors, while maximising the correlation between the datasets).
 
 2. Variable plots: What do the variable plots `plotVar` and  `circosPlot` tell you about the correlation between the variables that were selected by DIABLO? 
 
@@ -527,7 +525,7 @@ Show solutions
 
 #### Answers
 
-1.1 The `plot` output tells use that the mRNA and protein data sets are the most correlated. The least correlated pair is miRNA and protein. On component 1, DIABLO is able to extract correlated information between the data sets, and we observe some separation between the sample groups. 
+1.1 The `plot` output tells us that the mRNA and protein data sets are the most correlated. The least correlated pair is miRNA and protein. On component 1, DIABLO is able to extract correlated information between the data sets, and we observe some separation between the sample groups. 
 
 1.2 The `plotIndiv` output plots the set of components per data set. The mRNA and the protein datasets have some good discriminative properties. The miRNA dataset is a bit more noisy.
 
@@ -535,7 +533,7 @@ Show solutions
 
 2.2 The variable plot `circosPlot` shows mostly a negative correlation between some of the variables, with a cutoff of 0.7.
 
-3 According to the loading plot, the variables selected by DIABLO on component 1 discriminate `r colorize("blue", "Basal")`(positive loading value) vs. `r colorize("grey", "LumA")` (negative loading value), whereas the variables selected by DIABLO on component 2 discriminate `r colorize("orange", "Her2")`(positive loading value) vs. the two other groups (negative loading value).
+3 According to the loading plot, the variables selected by DIABLO on component 1 discriminate `r colorize("blue", "Basal")` (positive loading value) vs. `r colorize("grey", "LumA")` (negative loading value), whereas the variables selected by DIABLO on component 2 discriminate `r colorize("orange", "Her2")` (positive loading value) vs. the two other groups (negative loading value).
 
 
 :::
@@ -545,7 +543,7 @@ Show solutions
 
 ## Prediction on the test set (optional)
 
-The `predict` function associated predicts the class of samples from an external test set. In our specific case, one data set (proteomics) is missing in the test set but the method can still be applied. We need to ensure the names of the blocks correspond exactly to those from the training set:
+The `predict` function associated predicts the class of samples from an external test set. In our specific case, one data set (proteomics) is missing in the test set but the method can still be applied for sample prediction. We need to ensure the names of the blocks correspond exactly to those from the training set:
 
 ```{r 03-predict, message = FALSE, results='hide', fig.show='hide'}
 # Prepare test set data: here one block (proteins) is missing

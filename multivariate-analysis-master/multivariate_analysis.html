@@ -2904,8 +2904,8 @@ dim(X)  # check dimension</code></pre>
 assess for sample similarities between tumour types sotred in
 <code>srbct$class</code>. Remember that PCA is an unsupervised approach,
 but we can colour the samples by their tumour subtype to assist in
-interpreting the PCA (Figure @ref(fig:01-plsda-pca)). Here we center
-(default argument) and scale the data:</p>
+interpreting the PCA. Here we center (default argument) and scale the
+data:</p>
 <pre class="r"><code>pca.srbct &lt;- pca(X, ncomp = 10, scale = TRUE)
 
 pca.srbct
@@ -2953,14 +2953,14 @@ sample plot, with perhaps the exception of the <span style="color: #585858;">NB<
 other samples. This preliminary exploration teaches us two important
 findings:</p></li>
 </ol>
-<p>Conclusions:</p>
 <ul>
 <li><p>The major source of variation is not attributable to tumour type,
 but an unknown source (we tend to observe clusters of samples but those
 are not explained by tumour type).</p></li>
 <li><p>We need a more ‘directed’ (supervised) analysis to separate the
 tumour types, and we should expect that the amount of variance explained
-by the dimensions in PLS-DA analysis will be small.</p></li>
+by the dimensions in PLS-DA analysis will be small since they will be
+focusing on discriminating the sample groups.</p></li>
 </ul>
 </div>
 </div>
@@ -3001,7 +3001,7 @@ points:</p>
 <ol style="list-style-type: decimal">
 <li><p>Interpretation of the sample plot. What do we notice regarding
 the amount of explained variance per component, compared to PCA. Is this
-expected? Let’s also the sample plot for components 1 vs. 3.</p></li>
+expected? Let’s also the sample plot for component 1 vs. 3.</p></li>
 <li><p>Loadings plot: what does each bar represent? Let’s change the
 parameters <code>contrib = &#39;max&#39;</code> to <code>contrib = &#39;min&#39;</code>.
 Let’s now change the parameter <code>comp = 1</code> to
@@ -3083,7 +3083,7 @@ calculate the components in the linear combination.</p>
 <p>The variable selection process is done within PLS-DA. For this, we
 need to specify the number of variables to select per component.</p>
 <pre class="r"><code>splsda.srbct &lt;- splsda(X,Y, ncomp = 3,
-                       keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 30 on the third component
+                       keepX = c(20, 10, 10) # select 20 genes on the first component, 10 on the second, and 10 on the third component
                        )
 
 plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
@@ -3103,7 +3103,7 @@ plotIndiv(splsda.srbct, ind.names = FALSE, legend=TRUE,
 <li><p>What are the differences that you observe across all outputs,
 compared to the full PLS-DA run previously (i.e with no variable
 selection).</p></li>
-<li><p>Plot a sample plot for components 1. vs 3, what do you observe?
+<li><p>Plot a sample plot for component 1 vs 3, what do you observe?
 Also plot the loadings for component 3 for more insights.</p></li>
 <li><p>Change the values of the <code>keepX</code> argument, do you
 notice large changes?</p></li>
@@ -3285,7 +3285,8 @@ selectVar(diablo.tcga)</code></pre>
 correlated information between data sets <em>and</em> to discriminate
 sample groups? Are there datasets that are more noisy than others?
 (remember that we decompose each data matrix with a set of components,
-and loading vectors).</p></li>
+and loading vectors, while maximising the correlation between the
+datasets).</p></li>
 <li><p>Variable plots: What do the variable plots <code>plotVar</code>
 and <code>circosPlot</code> tell you about the correlation between the
 variables that were selected by DIABLO?</p></li>
@@ -3301,7 +3302,7 @@ weights)</p></li>
 <div id="q4" style="display:none">
 <div id="answers-2" class="section level4">
 <h4>Answers</h4>
-<p>1.1 The <code>plot</code> output tells use that the mRNA and protein
+<p>1.1 The <code>plot</code> output tells us that the mRNA and protein
 data sets are the most correlated. The least correlated pair is miRNA
 and protein. On component 1, DIABLO is able to extract correlated
 information between the data sets, and we observe some separation
@@ -3318,9 +3319,12 @@ plots).</p>
 <p>2.2 The variable plot <code>circosPlot</code> shows mostly a negative
 correlation between some of the variables, with a cutoff of 0.7.</p>
 <p>3 According to the loading plot, the variables selected by DIABLO on
-component 1 discriminate <span style="color: #388ECC;">Basal</span>(positive loading value) vs. <span style="color: #585858;">LumA</span> (negative loading value), whereas
-the variables selected by DIABLO on component 2 discriminate <span style="color: #F68B33;">Her2</span>(positive loading value) vs. the two
-other groups (negative loading value).</p>
+component 1 discriminate <span style="color: #388ECC;">Basal</span>
+(positive loading value) vs. <span style="color: #585858;">LumA</span>
+(negative loading value), whereas the variables selected by DIABLO on
+component 2 discriminate <span style="color: #F68B33;">Her2</span>
+(positive loading value) vs. the two other groups (negative loading
+value).</p>
 </div>
 </div>
 <!-- end solutions -->
@@ -3330,8 +3334,8 @@ other groups (negative loading value).</p>
 <p>The <code>predict</code> function associated predicts the class of
 samples from an external test set. In our specific case, one data set
 (proteomics) is missing in the test set but the method can still be
-applied. We need to ensure the names of the blocks correspond exactly to
-those from the training set:</p>
+applied for sample prediction. We need to ensure the names of the blocks
+correspond exactly to those from the training set:</p>
 <pre class="r"><code># Prepare test set data: here one block (proteins) is missing
 data.test.tcga &lt;- list(mRNA = breast.TCGA$data.test$mrna, 
                       miRNA = breast.TCGA$data.test$mirna)
