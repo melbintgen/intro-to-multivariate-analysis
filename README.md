@@ -38,9 +38,9 @@ library(mixOmics)
 
 ### Material
 
-[Slides](https://melbintgen.github.io/intro-to-multivariate-analysis/Intro_multiv_analysis_Slides.pdf).
+[Slides](https://melbintgen.github.io/intro-to-multivariate-analysis/Intro_multiv_analysis_Slides.pdf)
 
-[Practical](https://melbintgen.github.io/intro-to-multivariate-analysis/multivariate_analysis.html).
+[Practical](https://melbintgen.github.io/intro-to-multivariate-analysis/multivariate_analysis.html)
 
 
 
