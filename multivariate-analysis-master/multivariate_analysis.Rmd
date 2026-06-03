@@ -298,7 +298,7 @@ boxplot(X[, 'g1932']~ Y)
 
 Let's run all the command lines above and discuss about the following points:
 
-1. Interpretation of the sample plot. What do we notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Let's also the sample plot for component 1 vs. 3.
+1. Interpretation of the sample plot. What do we notice regarding the amount of explained variance per component, compared to PCA. Is this expected? Let's also produce the sample plot for component 1 vs. 3.
 
 2. Loadings plot: what does each bar represent? Let's change the parameters `contrib = 'max'` to `contrib = 'min'`. Let's now change the parameter `comp = 1` to  `comp = 2`. What do we observe? Now, let's interpret the loading plot in combination with the sample plot. Does the loading plot make sense in light of this additional information?
 
@@ -306,7 +306,7 @@ Let's run all the command lines above and discuss about the following points:
 
 4. Interpretation of the biplot.
 
-5. As a follow-up to the biplot interpretation, let's one gene and plot a boxplot with respect to the tumour subtype group (as shown). What is the link between how the gene is located on the biplot, and its expression levels per sample group?
+5. As a follow-up to the biplot interpretation, let's focus on one gene and plot a boxplot with respect to the tumour subtype group (as shown in code). What is the link between how the gene is located on the biplot, and its expression levels per sample group?
 
 <button onclick="myFunction(&#39;q2&#39;)">
 
@@ -478,7 +478,7 @@ More details on how to choose the design, either based on apriori knowledge / ex
 
 ## DIABLO
 
-Here we decide to run a model with 2 components. The number of variables to keep is listed below in `keepX` (we have decided on this based on tuning calculation based on repeated cross-validation. More details available on our website).
+Here we decide to run a model with 2 components. The number of variables to keep is listed below in `keepX` (optimal number according to repeated cross-validation. More details available on our website).
 
 
 ```{r 03-final, message = TRUE, results='hide', fig.show='hide'}
@@ -513,7 +513,7 @@ selectVar(diablo.tcga)
 
 Run the code above, line by line.
 
-1. Sample plots: What do the sample plots `plot` and `plotIndiv` tell you about the ability of DIABLO to extract correlated information between data sets *and* to discriminate sample groups? Are there datasets that are more noisy than others? (remember that we decompose each data matrix with a set of components, and loading vectors, while maximising the correlation between the datasets).
+1. Sample plots: What do the sample plots `plot` and `plotIndiv` tell you about the ability of DIABLO to extract correlated information between data sets *and* to discriminate sample groups? Are there datasets that are more noisy than others? (remember that we decompose each data matrix with a set of components, and loading vectors, while maximising the correlation between the datasets, see slides).
 
 2. Variable plots: What do the variable plots `plotVar` and  `circosPlot` tell you about the correlation between the variables that were selected by DIABLO? 
 
