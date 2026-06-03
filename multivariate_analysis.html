@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kim-Anh Lê Cao" />
 
-<meta name="date" content="2026-06-01" />
+<meta name="date" content="2026-06-03" />
 
 <title>Introduction to multivariate analysis with mixOmics</title>
 
@@ -2776,7 +2776,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Introduction to multivariate analysis with
 mixOmics</h1>
 <h4 class="author">Kim-Anh Lê Cao</h4>
-<h4 class="date">01 June 2026</h4>
+<h4 class="date">03 June 2026</h4>
 
 </div>
 
@@ -2902,11 +2902,11 @@ dim(X)  # check dimension</code></pre>
 <div id="id_01:plsda-pca" class="section level2">
 <h2>Exploration with PCA</h2>
 <p>PCA is a useful tool to explore the gene expression data and to
-assess for sample similarities between tumour types sotred in
-<code>srbct$class</code>. Remember that PCA is an unsupervised approach,
-but we can colour the samples by their tumour subtype to assist in
-interpreting the PCA. Here we center (default argument) and scale the
-data:</p>
+assess sample similarities between tumour types (information available
+in <code>srbct$class</code>). Remember that PCA is an unsupervised
+approach, but we can colour the samples by their tumour subtype to
+assist in interpreting the PCA. Here we center (default argument) and
+scale the data:</p>
 <pre class="r"><code>pca.srbct &lt;- pca(X, ncomp = 10, scale = TRUE)
 
 pca.srbct
@@ -3023,46 +3023,50 @@ expression levels per sample group?</p></li>
 <div id="q2" style="display:none">
 <div id="interpretation" class="section level3">
 <h3>Interpretation</h3>
-<p>1.1 Amount of explained variance: while PCA maximises the variance of
-the components, PLSDA maximises the covariance (akin to correlation)
-between the data and the outcome, hence the amount of explained variance
-can be lower than PCA (especially in this case, as we have seen already
-that the major source of variation in the data is not attributable to
-tumour subtypes).</p>
-<p>1.2 Sample plot: By default, the samples are coloured according to
-their class membership. Component 1 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #388ECC;">EWS</span> vs. <span style="color: #585858;">NB</span> + <span style="color: #F68B33;">BL</span>, component 2 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #585858;">NB</span> vs. <span style="color: #388ECC;">EWS</span> + <span style="color: #F68B33;">BL</span>, while component 3 discriminates
+<p><strong>1.1 Amount of explained variance:</strong> while PCA
+maximises the variance of the components, PLSDA maximises the covariance
+(akin to correlation) between the data and the outcome, hence the amount
+of explained variance can be lower than PCA (especially in this case, as
+we have seen already that the major source of variation in the data is
+not attributable to tumour subtypes).</p>
+<p><strong>1.2 Sample plot:</strong> By default, the samples are
+coloured according to their class membership. Component 1 discriminates
+<span style="color: #009E73;">RMS</span> + <span style="color: #388ECC;">EWS</span> vs. <span style="color: #585858;">NB</span> + <span style="color: #F68B33;">BL</span>, component 2 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #585858;">NB</span> vs. <span style="color: #388ECC;">EWS</span> + <span style="color: #F68B33;">BL</span>, while component 3 discriminates
 further the <span style="color: #585858;">NB</span> and <span style="color: #F68B33;">BL</span> groups. It is the combination of all
 three components that enables us to discriminate all classes.</p>
-<p>2.1 Loading plots: each bar represent the contribution (=
-coefficient) of each gene in each component. Her we only show the top 50
-genes with the highest contribution (positive or negative sign, going
-from the bottom of the graph to the top). colors the bars according to
-the tumour subtype for which the mean expression value is maximal.
-colors the bars according to the tumour subtype for which the mean
-expression value is minimal. When we change to , we observe a new set of
-genes and they are colored differently.</p>
-<p>2.2 Loading plots and sample plot. From the sample plot we have
-observed that component 1 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #388ECC;">EWS</span> vs. <span style="color: #585858;">NB</span> + <span style="color: #F68B33;">BL</span>. We observe the same trend at the gene
+<p><strong>2.1 Loading plots:</strong> each bar represent the
+contribution (= coefficient) of each gene in each component. Here we
+only show the top 50 genes with the highest contribution (positive or
+negative sign, going from the bottom of the graph to the top). The
+argument <code>contrib = &#39;max&#39;</code> colors the bars according to the
+tumour subtype for which the mean expression value is maximal. The
+argument <code>contrib = &#39;min&#39;</code> colors the bars according to the
+tumour subtype for which the mean expression value is minimal. When we
+change to the argument <code>comp = 2</code>, we observe a new set of
+genes and the color patterns are different.</p>
+<p><strong>2.2 Loading plots and sample plot:</strong> from the sample
+plot we have observed that component 1 discriminates <span style="color: #009E73;">RMS</span> + <span style="color: #388ECC;">EWS</span> vs. <span style="color: #585858;">NB</span> + <span style="color: #F68B33;">BL</span>. We observe the same trend at the gene
 level from the loading plot, showing that these genes are the one
 driving the separation between this group of samples. (similar
 interpretation for component 2). Hence, the loading plot confirms what
 we have observed at the sample level on the sample plot.</p>
-<p>3 Variable plot: here we project the variables in the space spanned
-by the first two components by calculating the correlation between the
-variables, and the components (refer to slides). We only show the top
-genes with a correlation cutoff above 0.7 across both components. We
-observe a groups of genes that are positively correlated together (left
-and right hand side on the x-axis), and contribute to component 1 either
-negatively (left) or positively (right). These two groups are negatively
-correlated to each other. The trend is not as clear for component 2
-(less genes and contribute less to component 2 on the y-axis).</p>
-<p>4 Biplot: overlays both samples (as dots) and variables (as arrows).
-Here we only show the top genes with a correlation cutoff above 0.7
-across both components. We can now visualise the same set of genes as in
-the correlation circle plot, and how they relate (are over / under
-expressed) with the samples.</p>
-<p>5 Genes that ‘points’ towards a specific group of samples tend to be
-overexpressed in these samples.</p>
+<p><strong>3. Variable plot:</strong> here we project the variables in
+the space spanned by the first two components by calculating the
+correlation between the variables, and the components (refer to slides).
+We only show the top genes with a correlation cutoff above 0.7 across
+both components. We observe a groups of genes that are positively
+correlated together (left and right hand side on the x-axis), and
+contribute to component 1 either negatively (left) or positively
+(right). These two groups are negatively correlated to each other. The
+trend is not as clear for component 2 (less genes and contribute less to
+component 2 on the y-axis).</p>
+<p><strong>4. Biplot:</strong> overlays both samples (as dots) and
+variables (as arrows). Here we only show the top genes with a
+correlation cutoff above 0.7 across both components. We can now
+visualise the same set of genes as in the correlation circle plot, and
+how they relate (are over / under expressed) with the samples.</p>
+<p><strong>5. Genes</strong> that ‘points’ towards a specific group of
+samples tend to be overexpressed in these samples.</p>
 </div>
 </div>
 <!-- end solutions -->
@@ -3249,6 +3253,13 @@ design </code></pre>
 ## mRNA     0.0   0.1     0.1
 ## miRNA    0.1   0.0     0.1
 ## protein  0.1   0.1     0.0</code></pre>
+<p>More details on how to choose the design, either based on apriori
+knowledge / expectation, or on data-driven approach:</p>
+<ul>
+<li><a href="https://mixomics.org/methods/n-integration-methods/" class="uri">https://mixomics.org/methods/n-integration-methods/</a></li>
+<li><a href="https://mixomics.org/mixdiablo/diablo-tcga-case-study/" class="uri">https://mixomics.org/mixdiablo/diablo-tcga-case-study/</a>
+(initial analysis part)</li>
+</ul>
 </div>
 <div id="diablo" class="section level2">
 <h2>DIABLO</h2>
