@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kim-Anh Lê Cao" />
 
-<meta name="date" content="2026-06-03" />
+<meta name="date" content="2026-06-04" />
 
 <title>Introduction to multivariate analysis with mixOmics</title>
 
@@ -2776,7 +2776,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Introduction to multivariate analysis with
 mixOmics</h1>
 <h4 class="author">Kim-Anh Lê Cao</h4>
-<h4 class="date">03 June 2026</h4>
+<h4 class="date">04 June 2026</h4>
 
 </div>
 
@@ -3002,7 +3002,8 @@ points:</p>
 <ol style="list-style-type: decimal">
 <li><p>Interpretation of the sample plot. What do we notice regarding
 the amount of explained variance per component, compared to PCA. Is this
-expected? Let’s also the sample plot for component 1 vs. 3.</p></li>
+expected? Let’s also produce the sample plot for component 1
+vs. 3.</p></li>
 <li><p>Loadings plot: what does each bar represent? Let’s change the
 parameters <code>contrib = &#39;max&#39;</code> to <code>contrib = &#39;min&#39;</code>.
 Let’s now change the parameter <code>comp = 1</code> to
@@ -3012,10 +3013,10 @@ make sense in light of this additional information?</p></li>
 <li><p>Interpretation of the variable plot (correlation circle plot,
 refer to slides).</p></li>
 <li><p>Interpretation of the biplot.</p></li>
-<li><p>As a follow-up to the biplot interpretation, let’s one gene and
-plot a boxplot with respect to the tumour subtype group (as shown). What
-is the link between how the gene is located on the biplot, and its
-expression levels per sample group?</p></li>
+<li><p>As a follow-up to the biplot interpretation, let’s focus on one
+gene and plot a boxplot with respect to the tumour subtype group (as
+shown in code). What is the link between how the gene is located on the
+biplot, and its expression levels per sample group?</p></li>
 </ol>
 <button onclick="myFunction(&#39;q2&#39;)">
 <p>Show solutions</p>
@@ -3264,9 +3265,9 @@ knowledge / expectation, or on data-driven approach:</p>
 <div id="diablo" class="section level2">
 <h2>DIABLO</h2>
 <p>Here we decide to run a model with 2 components. The number of
-variables to keep is listed below in <code>keepX</code> (we have decided
-on this based on tuning calculation based on repeated cross-validation.
-More details available on our website).</p>
+variables to keep is listed below in <code>keepX</code> (optimal number
+according to repeated cross-validation. More details available on our
+website).</p>
 <pre class="r"><code># number of variables to select per dataset and per component (here 2 comps)
 list.keepX &lt;- list( mRNA = c(8, 25), miRNA = c(14,5), protein = c(10, 5))
 
@@ -3298,7 +3299,7 @@ correlated information between data sets <em>and</em> to discriminate
 sample groups? Are there datasets that are more noisy than others?
 (remember that we decompose each data matrix with a set of components,
 and loading vectors, while maximising the correlation between the
-datasets).</p></li>
+datasets, see slides).</p></li>
 <li><p>Variable plots: What do the variable plots <code>plotVar</code>
 and <code>circosPlot</code> tell you about the correlation between the
 variables that were selected by DIABLO?</p></li>
