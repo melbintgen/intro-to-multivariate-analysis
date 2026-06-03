@@ -199,7 +199,7 @@ dim(X)  # check dimension
 
 ## Exploration with PCA {#01:plsda-pca}
 
-PCA is a useful tool to explore the gene expression data and to assess for sample similarities between tumour types sotred in `srbct$class`. Remember that PCA is an unsupervised approach, but we can colour the samples by their tumour subtype to assist in interpreting the PCA. Here we center (default argument) and scale the data:
+PCA is a useful tool to explore the gene expression data and to assess sample similarities between tumour types (information available in `srbct$class`). Remember that PCA is an unsupervised approach, but we can colour the samples by their tumour subtype to assist in interpreting the PCA. Here we center (default argument) and scale the data:
 
 ```{r 01-plsda-pca, fig.cap='(ref:01-plsda-pca)', fig.show='hide', results = 'hide'}
 pca.srbct <- pca(X, ncomp = 10, scale = TRUE)
@@ -318,20 +318,20 @@ Show solutions
 
 ### Interpretation
 
-1.1 Amount of explained variance: while PCA maximises the variance of the components, PLSDA maximises the covariance (akin to correlation) between the data and the outcome, hence the amount of explained variance can be lower than PCA (especially in this case, as we have seen already that the major source of variation in the data is not attributable to tumour subtypes). 
+**1.1 Amount of explained variance:** while PCA maximises the variance of the components, PLSDA maximises the covariance (akin to correlation) between the data and the outcome, hence the amount of explained variance can be lower than PCA (especially in this case, as we have seen already that the major source of variation in the data is not attributable to tumour subtypes). 
 
-1.2 Sample plot: By default, the samples are coloured according to their class membership. Component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`, component 2 discriminates `r colorize("green", "RMS")` + `r colorize("grey", "NB")` vs. `r colorize("blue", "EWS")` + `r colorize("orange", "BL")`, while component 3 discriminates further the `r colorize("grey", "NB")` and `r colorize("orange", "BL")` groups. It is the combination of all three components that enables us to discriminate all classes.
+**1.2 Sample plot:** By default, the samples are coloured according to their class membership. Component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`, component 2 discriminates `r colorize("green", "RMS")` + `r colorize("grey", "NB")` vs. `r colorize("blue", "EWS")` + `r colorize("orange", "BL")`, while component 3 discriminates further the `r colorize("grey", "NB")` and `r colorize("orange", "BL")` groups. It is the combination of all three components that enables us to discriminate all classes.
 
-2.1 Loading plots: each bar represent the contribution (= coefficient) of each gene in each component. Her we only show the top 50 genes with the highest contribution (positive or negative sign, going from the bottom of the graph to the top). `r contrib = 'max'` colors the bars according to the tumour subtype for which the mean expression value is maximal. `r contrib = 'min'` colors the bars according to the tumour subtype for which the mean expression value is minimal. When we change to  `r comp = 2`, we observe a new set of genes and they are colored differently. 
+**2.1 Loading plots:** each bar represent the contribution (= coefficient) of each gene in each component. Here we only show the top 50 genes with the highest contribution (positive or negative sign, going from the bottom of the graph to the top). The argument `contrib = 'max'` colors the bars according to the tumour subtype for which the mean expression value is maximal. The argument  `contrib = 'min'` colors the bars according to the tumour subtype for which the mean expression value is minimal. When we change to  the argument `comp = 2`, we observe a new set of genes and the color patterns are different. 
 
-2.2 Loading plots and sample plot. From the sample plot we have observed that component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`. We observe the same trend at the gene level from the loading plot, showing that these genes are the one driving the separation between this group of samples. (similar interpretation for component 2). Hence, the loading plot confirms what we have observed at the sample level on the sample plot.
+**2.2 Loading plots and sample plot:** from the sample plot we have observed that component 1 discriminates `r colorize("green", "RMS")` + `r colorize("blue", "EWS")` vs. `r colorize("grey", "NB")` + `r colorize("orange", "BL")`. We observe the same trend at the gene level from the loading plot, showing that these genes are the one driving the separation between this group of samples. (similar interpretation for component 2). Hence, the loading plot confirms what we have observed at the sample level on the sample plot.
 
-3 Variable plot: here we project the variables in the space spanned by the first two components by calculating the correlation between the variables, and the components (refer to slides). We only show the top genes with a correlation cutoff above 0.7 across both components. We observe a groups of genes that are positively correlated together (left and right hand side on the x-axis), and contribute to component 1 either negatively (left) or positively (right). These two groups are negatively correlated to each other. The trend is not as clear for component 2 (less genes and contribute less to component 2 on the y-axis).
+**3. Variable plot:** here we project the variables in the space spanned by the first two components by calculating the correlation between the variables, and the components (refer to slides). We only show the top genes with a correlation cutoff above 0.7 across both components. We observe a groups of genes that are positively correlated together (left and right hand side on the x-axis), and contribute to component 1 either negatively (left) or positively (right). These two groups are negatively correlated to each other. The trend is not as clear for component 2 (less genes and contribute less to component 2 on the y-axis).
 
 
-4 Biplot: overlays both samples (as dots) and variables (as arrows). Here we only show the top genes with a correlation cutoff above 0.7 across both components. We can now visualise the same set of genes as in the correlation circle plot, and how they relate (are over / under expressed) with the samples. 
+**4. Biplot:** overlays both samples (as dots) and variables (as arrows). Here we only show the top genes with a correlation cutoff above 0.7 across both components. We can now visualise the same set of genes as in the correlation circle plot, and how they relate (are over / under expressed) with the samples. 
 
-5 Genes that 'points' towards a specific group of samples tend to be overexpressed in these samples.
+**5. Genes** that 'points' towards a specific group of samples tend to be overexpressed in these samples.
 
 :::
 
@@ -470,6 +470,11 @@ design <- matrix(0.1, ncol = length(X), nrow = length(X),
 diag(design) <- 0
 design 
 ```
+
+More details on how to choose the design, either based on apriori knowledge / expectation, or on data-driven approach:
+
+- https://mixomics.org/methods/n-integration-methods/
+- https://mixomics.org/mixdiablo/diablo-tcga-case-study/ (initial analysis part)
 
 ## DIABLO
 
