@@ -63,7 +63,7 @@ plotIndiv(pca.srbct,
 ## ----results = 'hold', message=FALSE, results='hide'----------
 Y <- srbct$class 
 length(Y)
-
+summary(Y)
 
 ## ----01-plsda, results = 'hide', fig.show='hide'--------------
 plsda.srbct <- plsda(X,Y, ncomp = 3)
@@ -134,7 +134,7 @@ diablo.tcga <- block.splsda(X, Y, ncomp = 2,
 # the message tells us that each data set will be linked to the outcome Y for maximal discrimination
 
 # sample plots:
-plot(diablo.tcga) # pairs of components across datasets and their correlation
+plot(diablo.tcga, ncomp = 1) # pairs of components across datasets and their correlation
 
 plotIndiv(diablo.tcga, ind.names = FALSE, legend = TRUE)
 
