@@ -141,7 +141,7 @@ plotIndiv(diablo.tcga, ind.names = FALSE, legend = TRUE)
 # variable plots:
 plotVar(diablo.tcga, legend = TRUE)
 
-circosPlot(diablo.tcga, , cutoff = 0.7)
+circosPlot(diablo.tcga, cutoff = 0.7)
 
 plotLoadings(diablo.tcga, contrib = 'max',  # max = which class has maximum mean (median) expression (vs. min)
              method = 'mean',  # choose either mean or median
